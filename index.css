@@ -1,0 +1,110 @@
+/**
+body {
+}
+
+main {
+}
+
+footer.page-footer {
+  background: none;
+}
+
+footer li {
+  display: inline-block;
+}
+
+footer.page-footer .footer-copyright span {
+  padding: 0 2px;
+}
+
+footer.page-footer .footer-copyright a {
+  color: orange;
+  padding: 0 3px;
+}
+
+footer.page-footer .footer-copyright {
+  -webkit-font-smoothing: antialiased;
+  font-weight: 400;
+  font-size: .9rem;
+  line-height: 35px;
+  height: auto;
+  background: #333;
+}
+
+h1,h2,h3,h4,h5,h6 {
+  -webkit-font-smoothing: antialiased;
+  font-weight: 300;
+}
+
+h4 small {
+  font-size: 1.2rem;
+}
+
+.title {
+  font-family: monospace;
+}
+
+form {
+  color: #fafafa;
+  background: #666;
+}
+
+textarea.materialize-textarea {
+  border-bottom-color: yellow;
+  color: #eee;
+  font-size: 1.5rem;
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+  margin-bottom: 0px;
+}
+
+textarea.materialize-textarea:focus {
+  border-bottom-color: cyan !important;
+  color: white;
+}
+
+
+.input {
+  background: #779;
+  padding-bottom: 22px;
+}
+
+.output {
+  border-bottom: 1px solid;
+  border-bottom-color: rgba(50,200,200,.5);
+  font-size: 1.4rem;
+  font-family: Inconsolata, monospace;
+  font-weight: 100;
+  letter-spacing: 1px;
+  word-wrap: break-word;
+}
+
+.output:after {
+  content: '\00a0'
+}
+
+[contenteditable] {
+  padding: 3px 4px 3px 3px;
+  background-color: #888;
+  color: white;
+  outline: none;
+}
+
+[contenteditable]:focus {
+  background-color: #999;
+  color: white;
+  outline: none;
+}
+
+.table-of-contents li:hover > a + a {
+  display: inline-block;
+}
+
+.hiddendiv:after {
+  content: '\n';
+}
+
+.hidden {
+  display: none;
+}
+*/

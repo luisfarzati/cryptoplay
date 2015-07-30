@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>crypto</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Inconsolata">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/octicons/2.4.1/octicons.min.css">
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/css/materialize.min.css">
+    <link rel="stylesheet" href="index.css">
+    <style>
+      .main.col {
+        background: #999;
+        padding: 0;
+      }
+
+      .main.col > .row {
+        margin: 0;
+      }
+
+      .side.col {
+        padding: 0;
+      }
+
+      .tabs {
+        background: #222;
+      }
+
+      .toc-wrapper {
+        width: 100%;
+      }
+
+      .table-of-contents {
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .table-of-contents li {
+        padding: 6px 0;
+      }
+
+      .table-of-contents li a {
+        color: #777;
+      }
+
+      .table-of-contents li:hover {
+        background: #fea;
+        cursor: pointer;
+        border-left: 2px solid #f77;
+      }
+
+      .table-of-contents li:hover a {
+        border: none;
+        color: black;
+      }
+
+      .table-of-contents li.selected {
+        background: #fea;
+        border-left: 2px solid #f77;
+      }
+
+      .table-of-contents li.selected a {
+        color: #333;
+        font-weight: bold;
+      }
+
+      .table-of-contents li.active-input {
+        color: #333;
+        background: #fea;
+        border-left: 2px solid #f77;
+        opacity: .25;
+        cursor: default !important;
+      }
+
+      .table-of-contents li.active-input a {
+        font-weight: normal;
+        color: black;
+        cursor: default;
+      }
+
+      .table-of-contents li.active-input a:after {
+        font-weight: normal;
+        font-size: .9rem;
+        color: #444;
+      }
+
+      textarea.materialize-textarea {
+	      font-family: Inconsolata;
+        font-size: 18px;
+      	font-weight: 100;
+        color: white;
+        margin-bottom: 0;
+      }
+
+      .hiddendiv:after {
+        content: '\n';
+      }
+
+      .row.input {
+        background: #55a !important;
+        padding-bottom: 20px;
+      }
+
+      .row.output {
+        background: #777 !important;
+        padding-bottom: 20px;
+      }
+
+      .row.output h5 {
+        color: #ccc;
+      }
+
+      .row.output .result {
+        font-family: Inconsolata;
+        font-size: 16px;
+      	font-weight: 100;
+        color: white;
+        border-bottom: 1px solid cyan;
+      }
+
+      .character-counter {
+        float: right;
+        font-size: 12px;
+        height: 1px;
+        color: #efefef;
+        font-weight: 300;
+        letter-spacing: 1px;
+      }
+
+      [ng-cloak] { display: none }
+    </style>
+  </head>
+  <body ng-app="crypto" ng-controller="CryptoController as ctrl">
+    <main>
+      <div class="row" ng-cloak>
+        <div class="col s12 m10 main">
+          <div class="row">
+            <ul tabs>
+              <li ng-repeat="alg in ::ctrl.algorithms | filter:{symmetric:true}" class="tab col s2"><a ng-href="#{{::alg.name}}" ng-click="ctrl.switchInput(alg)">{{ ::alg.name }}</a></li>
+            </ul>
+            <div id="#{{alg.name}}" ng-repeat="alg in ::ctrl.algorithms | filter:{symmetric:true}"></div>
+          </div>
+          <div class="row input">
+            <div class="input-field col s12">
+              <textarea autofocus ng-keypress="ctrl.keypress($event)" ng-model="ctrl.source" ng-trim="false" placeholder="enter {{ ctrl.input.name }} string" class="materialize-textarea"></textarea>
+              <span class="character-counter">
+                <strong>{{ ctrl.bytes | encode:ctrl.input | stringify:ctrl.input | length }} chars</strong>
+                <span ng-if="ctrl.input.name != 'plain'">| {{ ctrl.bytes.sigBytes || '0' }} byte{{ ctrl.bytes.sigBytes != 1 ? 's' : '' }}</span>
+              </span>
+            </div>
+          </div>
+          <div class="row output" ng-repeat="alg in ctrl.algorithms | filter:{selected:true} | exclude:ctrl.input">
+            <div class="col s12">
+              <h5>{{ ::alg.name }}</h5>
+              <div class="result">{{ ctrl.bytes | encode:alg | stringify:alg }}</div>
+              <span class="character-counter">
+                <span>{{ ctrl.bytes | encode:alg | stringify:alg | length }} char{{ (ctrl.bytes | encode:alg | stringify:alg | length) != 1 ? 's' : ''}}</span>
+                <span ng-if="alg.name != 'plain' && alg.name != 'hex'">| {{ ctrl.bytes | encode:alg | length }} byte{{ (ctrl.bytes | encode:alg | length) != 1 ? 's' : '' }}</span>
+                <span ng-if="alg.name == 'hex'">| {{ (ctrl.bytes | length) || '0' }} byte{{ (ctrl.bytes | length) != 1 ? 's' : '' }}</span>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="col s12 m2 side">
+          <div class="toc-wrapper hidden">
+            <div style="font-family:Roboto;height:100%;background:orange;margin:0;padding:20px;-webkit-font-smoothing:antialiased;font-weight:300;font-size:2rem">crypto</div>
+            <ul class="table-of-contents" style="margin:0">
+              <li ng-if="ctrl.input != alg" ng-repeat="alg in ::ctrl.algorithms" ng-class="{'active-input': ctrl.input == alg, selected: alg.selected }" ng-click="ctrl.toggle(alg)">
+                  <a ng-href="#{{::alg.name}}">{{::alg.name}}</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/js/materialize.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular-sanitize.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/core-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/enc-base64-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/md5-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/sha256-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/hmac-sha256.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/aes-min.js"></script>
+    <script src="index.js"></script>
+  </body>
+</html>
